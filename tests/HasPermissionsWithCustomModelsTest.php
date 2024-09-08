@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Tests\TestModels\Admin;
-use Spatie\Permission\Tests\TestModels\Permission;
-use Spatie\Permission\Tests\TestModels\User;
+use Elite\Permission\PermissionRegistrar;
+use Elite\Permission\Tests\TestModels\Admin;
+use Elite\Permission\Tests\TestModels\Permission;
+use Elite\Permission\Tests\TestModels\User;
 
 class HasPermissionsWithCustomModelsTest extends HasPermissionsTest
 {

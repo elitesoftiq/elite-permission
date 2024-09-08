@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\Permission\Commands;
+namespace Elite\Permission\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\Permission\Contracts\AdminPermission as PermissionContract;
-use Spatie\Permission\Contracts\AdminRole as RoleContract;
+use Elite\Permission\Contracts\AdminPermission as PermissionContract;
+use Elite\Permission\Contracts\AdminRole as RoleContract;
 use Symfony\Component\Console\Helper\TableCell;
 
 class ShowAdmin extends Command

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission;
+namespace Elite\Permission;
 
 use Composer\InstalledVersions;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -13,10 +13,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
-use Spatie\Permission\Contracts\Permission as PermissionContract;
-use Spatie\Permission\Contracts\Role as RoleContract;
-use Spatie\Permission\Contracts\AdminPermission as AdminPermissionContract;
-use Spatie\Permission\Contracts\AdminRole as AdminRoleContract;
+use Elite\Permission\Contracts\Permission as PermissionContract;
+use Elite\Permission\Contracts\Role as RoleContract;
+use Elite\Permission\Contracts\AdminPermission as AdminPermissionContract;
+use Elite\Permission\Contracts\AdminRole as AdminRoleContract;
 
 class PermissionServiceProvider extends ServiceProvider
 {
@@ -166,7 +166,7 @@ class PermissionServiceProvider extends ServiceProvider
 
     protected function registerBladeExtensions(BladeCompiler $bladeCompiler): void
     {
-        $bladeMethodWrapper = '\\Spatie\\Permission\\PermissionServiceProvider::bladeMethodWrapper';
+        $bladeMethodWrapper = '\\Elite\\Permission\\PermissionServiceProvider::bladeMethodWrapper';
 
         // permission checks
         $bladeCompiler->if('haspermission', fn () => $bladeMethodWrapper('checkPermissionTo', ...func_get_args()));

@@ -1,8 +1,9 @@
 {
-    "name": "spatie/laravel-permission",
-    "description": "Permission handling for Laravel 8.0 and up",
+    "name": "elitesoftiq/laravel-saas-permission",
+    "description": "SaaS Permission handling for Laravel 8.0 and up",
     "license": "MIT",
     "keywords": [
+        "elitesoftiq",
         "spatie",
         "laravel",
         "permission",
@@ -12,15 +13,7 @@
         "rbac",
         "security"
     ],
-    "authors": [
-        {
-            "name": "Freek Van der Herten",
-            "email": "freek@spatie.be",
-            "homepage": "https://spatie.be",
-            "role": "Developer"
-        }
-    ],
-    "homepage": "https://github.com/spatie/laravel-permission",
+    "homepage": "https://github.com/elitesoftiq/laravel-saas-permission",
     "require": {
         "php": "^8.0",
         "illuminate/auth": "^8.12|^9.0|^10.0|^11.0",
@@ -37,7 +30,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Spatie\\Permission\\": "src"
+            "Elite\\Permission\\": "src"
         },
         "files": [
             "src/helpers.php"
@@ -45,7 +38,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Permission\\Tests\\": "tests"
+            "Elite\\Permission\\Tests\\": "tests"
         }
     },
     "config": {
@@ -58,7 +51,7 @@
         },
         "laravel": {
             "providers": [
-                "Spatie\\Permission\\PermissionServiceProvider"
+                "Elite\\Permission\\PermissionServiceProvider"
             ]
         }
     },

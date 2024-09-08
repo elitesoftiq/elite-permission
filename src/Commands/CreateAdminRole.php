@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\Permission\Commands;
+namespace Elite\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Permission\Contracts\AdminPermission as PermissionContract;
-use Spatie\Permission\Contracts\AdminRole as RoleContract;
-use Spatie\Permission\AdminPermissionRegistrar;
+use Elite\Permission\Contracts\AdminPermission as PermissionContract;
+use Elite\Permission\Contracts\AdminRole as RoleContract;
+use Elite\Permission\AdminPermissionRegistrar;
 
 class CreateAdminRole extends Command
 {

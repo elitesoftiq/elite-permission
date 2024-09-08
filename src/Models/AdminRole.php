@@ -1,18 +1,18 @@
 <?php
 
-namespace Spatie\Permission\Models;
+namespace Elite\Permission\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spatie\Permission\Contracts\AdminRole as RoleContract;
-use Spatie\Permission\Exceptions\GuardDoesNotMatch;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-use Spatie\Permission\Exceptions\RoleAlreadyExists;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
-use Spatie\Permission\Guard;
-use Spatie\Permission\AdminPermissionRegistrar;
-use Spatie\Permission\Traits\HasAdminPermissions;
-use Spatie\Permission\Traits\RefreshesAdminPermissionCache;
+use Elite\Permission\Contracts\AdminRole as RoleContract;
+use Elite\Permission\Exceptions\GuardDoesNotMatch;
+use Elite\Permission\Exceptions\PermissionDoesNotExist;
+use Elite\Permission\Exceptions\RoleAlreadyExists;
+use Elite\Permission\Exceptions\RoleDoesNotExist;
+use Elite\Permission\Guard;
+use Elite\Permission\AdminPermissionRegistrar;
+use Elite\Permission\Traits\HasAdminPermissions;
+use Elite\Permission\Traits\RefreshesAdminPermissionCache;
 
 /**
  * @property ?\Illuminate\Support\Carbon $created_at
@@ -154,7 +154,7 @@ class AdminRole extends Model implements RoleContract
     /**
      * Determine if the admin role may perform the given admin permission.
      *
-     * @param  string|int|\Spatie\Permission\Contracts\Permission|\BackedEnum  $permission
+     * @param  string|int|\Elite\Permission\Contracts\Permission|\BackedEnum  $permission
      *
      * @throws PermissionDoesNotExist|GuardDoesNotMatch
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
 class RouteTest extends TestCase
 {

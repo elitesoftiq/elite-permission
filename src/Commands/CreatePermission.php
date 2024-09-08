@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\Permission\Commands;
+namespace Elite\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Permission\Contracts\Permission as PermissionContract;
+use Elite\Permission\Contracts\Permission as PermissionContract;
 
 class CreatePermission extends Command
 {
-    protected $signature = 'permission:create-permission 
-                {name : The name of the permission} 
+    protected $signature = 'permission:create-permission
+                {name : The name of the permission}
                 {guard? : The name of the guard}';
 
     protected $description = 'Create a permission';

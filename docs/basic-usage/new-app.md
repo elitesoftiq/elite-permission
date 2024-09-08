@@ -37,7 +37,7 @@ touch database/database.sqlite
 
 # Package
 composer require spatie/laravel-permission
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+php artisan vendor:publish --provider="Elite\Permission\PermissionServiceProvider"
 git add .
 git commit -m "Add Spatie Laravel Permissions package"
 php artisan migrate:fresh
@@ -49,6 +49,7 @@ git add . && git commit -m "Add HasRoles trait"
 ```
 
 If you didn't install Laravel Breeze or Jetstream, add Laravel's basic auth scaffolding:
+
 ```php
 composer require laravel/ui --dev
 php artisan ui bootstrap --auth
@@ -57,7 +58,8 @@ git add . && git commit -m "Setup auth scaffold"
 ```
 
 ### Add some basic permissions
-- Add a new file, `/database/seeders/PermissionsDemoSeeder.php` such as the following (You could create it with `php artisan make:seed` and then edit the file accordingly):
+
+-   Add a new file, `/database/seeders/PermissionsDemoSeeder.php` such as the following (You could create it with `php artisan make:seed` and then edit the file accordingly):
 
 ```php
 <?php
@@ -65,9 +67,9 @@ git add . && git commit -m "Setup auth scaffold"
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\PermissionRegistrar;
+use Elite\Permission\Models\Permission;
+use Elite\Permission\Models\Role;
+use Elite\Permission\PermissionRegistrar;
 
 class PermissionsDemoSeeder extends Seeder
 {
@@ -120,17 +122,18 @@ class PermissionsDemoSeeder extends Seeder
 
 ```
 
-- re-migrate and seed the database:
+-   re-migrate and seed the database:
 
 ```sh
 php artisan migrate:fresh --seed --seeder=PermissionsDemoSeeder
 ```
 
 ### Grant Super-Admin access
+
 Super-Admins are a common feature. The following approach allows that when your Super-Admin user is logged in, all permission-checks in your app which call `can()` or `@can()` will return true.
 
-- Create a role named `Super-Admin`. (Or whatever name you wish; but use it consistently just like you must with any role name.)
-- Add a Gate::before check in your `AuthServiceProvider` (or `AppServiceProvider` since Laravel 11):
+-   Create a role named `Super-Admin`. (Or whatever name you wish; but use it consistently just like you must with any role name.)
+-   Add a Gate::before check in your `AuthServiceProvider` (or `AppServiceProvider` since Laravel 11):
 
 ```diff
 + use Illuminate\Support\Facades\Gate;
@@ -146,16 +149,16 @@ Super-Admins are a common feature. The following approach allows that when your 
     }
 ```
 
-
 ### Application Code
+
 The permissions created in the seeder above imply that there will be some sort of Posts or Article features, and that various users will have various access control levels to manage/view those objects.
 
 Your app will have Models, Controllers, routes, Views, Factories, Policies, Tests, middleware, and maybe additional Seeders.
 
 You can see examples of these in the demo app at https://github.com/drbyte/spatie-permissions-demo/
 
-
 ### Quick Examples
+
 If you are creating a demo app for reporting a bug or getting help with troubleshooting something, skip this section and proceed to "Sharing" below.
 
 If this is your first app with this package, you may want some quick permission examples to see it in action. If you've set up your app using the instructions above, the following examples will work in conjunction with the users and permissions created in the seeder.
@@ -163,6 +166,7 @@ If this is your first app with this package, you may want some quick permission 
 Three users were created: test@example.com, admin@example.com, superadmin@example.com and the password for each is "password".
 
 `/resources/views/dashboard.php`
+
 ```diff
     <div class="p-6 text-gray-900">
         {{ __("You're logged in!") }}
@@ -177,10 +181,12 @@ Three users were created: test@example.com, admin@example.com, superadmin@exampl
 +    Congratulations, you are a super-admin!
 +    @endcan
 ```
+
 With the above code, when you login with each respective user, you will see different messages based on that access.
 
-Here's a routes example with Breeze and Laravel 11. 
+Here's a routes example with Breeze and Laravel 11.
 Edit `/routes/web.php`:
+
 ```diff
 -Route::middleware('auth')->group(function () {
 +Route::middleware('role_or_permission:publish articles')->group(function () {
@@ -189,27 +195,31 @@ Edit `/routes/web.php`:
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 ```
+
 With the above change, you will be unable to access the user "Profile" page unless you are logged in with "admin" or "super-admin". You could change `role_or_permission:publish_articles` to `role:writer` to make it only available to the "test" user.
 
 ## Sharing
+
 To share your app on Github for easy collaboration:
 
-- create a new public repository on Github, without any extras like readme/etc.
-- follow github's sample code for linking your local repo and uploading the code. It will look like this:
+-   create a new public repository on Github, without any extras like readme/etc.
+-   follow github's sample code for linking your local repo and uploading the code. It will look like this:
 
 ```sh
 git remote add origin git@github.com:YOURUSERNAME/REPONAME.git
 git push -u origin main
 ```
-The above only needs to be done once. 
 
-- then add the rest of your code by making new commits:
+The above only needs to be done once.
+
+-   then add the rest of your code by making new commits:
 
 ```sh
 git add .
 git commit -m "Explain what your commit is about here"
 git push origin main
 ```
+
 Repeat the above process whenever you change code that you want to share.
 
 Those are the basics!

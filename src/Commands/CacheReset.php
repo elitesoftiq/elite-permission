@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Permission\Commands;
+namespace Elite\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\AdminPermissionRegistrar;
+use Elite\Permission\PermissionRegistrar;
+use Elite\Permission\AdminPermissionRegistrar;
 
 class CacheReset extends Command
 {

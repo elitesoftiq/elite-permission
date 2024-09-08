@@ -1,17 +1,17 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
-use Spatie\Permission\Contracts\Role;
-use Spatie\Permission\Exceptions\GuardDoesNotMatch;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-use Spatie\Permission\Exceptions\RoleAlreadyExists;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Tests\TestModels\Admin;
-use Spatie\Permission\Tests\TestModels\RuntimeRole;
-use Spatie\Permission\Tests\TestModels\User;
+use Elite\Permission\Contracts\Role;
+use Elite\Permission\Exceptions\GuardDoesNotMatch;
+use Elite\Permission\Exceptions\PermissionDoesNotExist;
+use Elite\Permission\Exceptions\RoleAlreadyExists;
+use Elite\Permission\Exceptions\RoleDoesNotExist;
+use Elite\Permission\Models\Permission;
+use Elite\Permission\PermissionRegistrar;
+use Elite\Permission\Tests\TestModels\Admin;
+use Elite\Permission\Tests\TestModels\RuntimeRole;
+use Elite\Permission\Tests\TestModels\User;
 
 class RoleTest extends TestCase
 {

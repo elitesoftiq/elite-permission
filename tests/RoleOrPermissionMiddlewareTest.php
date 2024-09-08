@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Laravel\Passport\Passport;
-use Spatie\Permission\Exceptions\UnauthorizedException;
-use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
-use Spatie\Permission\Tests\TestModels\UserWithoutHasRoles;
+use Elite\Permission\Exceptions\UnauthorizedException;
+use Elite\Permission\Middleware\RoleOrPermissionMiddleware;
+use Elite\Permission\Tests\TestModels\UserWithoutHasRoles;
 
 class RoleOrPermissionMiddlewareTest extends TestCase
 {
@@ -278,15 +278,15 @@ class RoleOrPermissionMiddlewareTest extends TestCase
     public function the_middleware_can_be_created_with_static_using_method()
     {
         $this->assertSame(
-            'Spatie\Permission\Middleware\RoleOrPermissionMiddleware:edit-articles',
+            'Elite\Permission\Middleware\RoleOrPermissionMiddleware:edit-articles',
             RoleOrPermissionMiddleware::using('edit-articles')
         );
         $this->assertEquals(
-            'Spatie\Permission\Middleware\RoleOrPermissionMiddleware:edit-articles,my-guard',
+            'Elite\Permission\Middleware\RoleOrPermissionMiddleware:edit-articles,my-guard',
             RoleOrPermissionMiddleware::using('edit-articles', 'my-guard')
         );
         $this->assertEquals(
-            'Spatie\Permission\Middleware\RoleOrPermissionMiddleware:edit-articles|testAdminRole',
+            'Elite\Permission\Middleware\RoleOrPermissionMiddleware:edit-articles|testAdminRole',
             RoleOrPermissionMiddleware::using(['edit-articles', 'testAdminRole'])
         );
     }

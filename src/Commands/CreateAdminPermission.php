@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Permission\Commands;
+namespace Elite\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Permission\Contracts\AdminPermission as PermissionContract;
+use Elite\Permission\Contracts\AdminPermission as PermissionContract;
 
 class CreateAdminPermission extends Command
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Exceptions;
+namespace Elite\Permission\Exceptions;
 
 use Illuminate\Contracts\Auth\Access\Authorizable;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -57,7 +57,7 @@ class UnauthorizedException extends HttpException
     {
         $class = get_class($user);
 
-        return new static(403, "Authorizable class `{$class}` must use Spatie\Permission\Traits\HasRoles or Spatie\Permission\Traits\HasAdminRoles traits.", null, []);
+        return new static(403, "Authorizable class `{$class}` must use Elite\Permission\Traits\HasRoles or Elite\Permission\Traits\HasAdminRoles traits.", null, []);
     }
 
     public static function notLoggedIn(): self

@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\Permission\Tests\TestModels;
+namespace Elite\Permission\Tests\TestModels;
 
-use Spatie\Permission\WildcardPermission as BaseWildcardPermission;
+use Elite\Permission\WildcardPermission as BaseWildcardPermission;
 
 class WildcardPermission extends BaseWildcardPermission
 {

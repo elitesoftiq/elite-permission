@@ -10,10 +10,10 @@ return [
          * is often just the "AdminPermission" model but you may use whatever you like.
          *
          * The model you want to use as a AdminPermission model needs to implement the
-         * `Spatie\Permission\Contracts\AdminPermission` contract.
+         * `Elite\Permission\Contracts\AdminPermission` contract.
          */
 
-        'permission' => Spatie\Permission\Models\AdminPermission::class,
+        'permission' => Elite\Permission\Models\AdminPermission::class,
 
         /*
          * When using the "HasAdminRoles" trait from this package, we need to know which
@@ -21,10 +21,10 @@ return [
          * is often just the "AdminRole" model but you may use whatever you like.
          *
          * The model you want to use as a AdminRole model needs to implement the
-         * `Spatie\Permission\Contracts\AdminRole` contract.
+         * `Elite\Permission\Contracts\AdminRole` contract.
          */
 
-        'role' => Spatie\Permission\Models\AdminRole::class,
+        'role' => Elite\Permission\Models\AdminRole::class,
 
     ],
 
@@ -114,7 +114,7 @@ return [
      * The class to use for interpreting wildcard admin permissions.
      * If you need to modify delimiters, override the class and specify its name here.
      */
-    // 'permission.wildcard_permission' => Spatie\Permission\WildcardPermission::class,
+    // 'permission.wildcard_permission' => Elite\Permission\WildcardPermission::class,
 
     /* Cache-specific settings */
 

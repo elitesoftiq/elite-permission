@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Contracts;
+namespace Elite\Permission\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $name
  * @property string|null $guard_name
  *
- * @mixin \Spatie\Permission\Models\AdminPermission
+ * @mixin \Elite\Permission\Models\AdminPermission
  *
- * @phpstan-require-extends \Spatie\Permission\Models\AdminPermission
+ * @phpstan-require-extends \Elite\Permission\Models\AdminPermission
  */
 interface AdminPermission
 {
@@ -24,7 +24,7 @@ interface AdminPermission
      * Find a admin permission by its name.
      *
      *
-     * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
+     * @throws \Elite\Permission\Exceptions\PermissionDoesNotExist
      */
     public static function findByName(string $name, ?string $guardName): self;
 
@@ -32,7 +32,7 @@ interface AdminPermission
      * Find a admin permission by its id.
      *
      *
-     * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
+     * @throws \Elite\Permission\Exceptions\PermissionDoesNotExist
      */
     public static function findById(int|string $id, ?string $guardName): self;
 

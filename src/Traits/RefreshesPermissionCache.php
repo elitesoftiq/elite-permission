@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\Permission\Traits;
+namespace Elite\Permission\Traits;
 
-use Spatie\Permission\PermissionRegistrar;
+use Elite\Permission\PermissionRegistrar;
 
 trait RefreshesPermissionCache
 {

@@ -1,21 +1,21 @@
 <?php
 
-namespace Spatie\Permission\Traits;
+namespace Elite\Permission\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Spatie\Permission\Contracts\AdminPermission as Permission;
-use Spatie\Permission\Contracts\AdminRole as Role;
-use Spatie\Permission\Contracts\Wildcard;
-use Spatie\Permission\Exceptions\GuardDoesNotMatch;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-use Spatie\Permission\Exceptions\WildcardPermissionInvalidArgument;
-use Spatie\Permission\Exceptions\WildcardPermissionNotImplementsContract;
-use Spatie\Permission\Guard;
-use Spatie\Permission\AdminPermissionRegistrar;
-use Spatie\Permission\WildcardPermission;
+use Elite\Permission\Contracts\AdminPermission as Permission;
+use Elite\Permission\Contracts\AdminRole as Role;
+use Elite\Permission\Contracts\Wildcard;
+use Elite\Permission\Exceptions\GuardDoesNotMatch;
+use Elite\Permission\Exceptions\PermissionDoesNotExist;
+use Elite\Permission\Exceptions\WildcardPermissionInvalidArgument;
+use Elite\Permission\Exceptions\WildcardPermissionNotImplementsContract;
+use Elite\Permission\Guard;
+use Elite\Permission\AdminPermissionRegistrar;
+use Elite\Permission\WildcardPermission;
 
 trait HasAdminPermissions
 {

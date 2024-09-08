@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
 use Composer\InstalledVersions;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Artisan;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Elite\Permission\Models\Permission;
+use Elite\Permission\Models\Role;
 
 class CommandTest extends TestCase
 {
@@ -166,7 +166,7 @@ class CommandTest extends TestCase
     public function it_can_show_roles_by_teams()
     {
         config()->set('permission.teams', true);
-        app(\Spatie\Permission\PermissionRegistrar::class)->initializeCache();
+        app(\Elite\Permission\PermissionRegistrar::class)->initializeCache();
 
         Role::where('name', 'testRole2')->delete();
         Role::create(['name' => 'testRole_2']);
@@ -197,7 +197,7 @@ class CommandTest extends TestCase
             $this->markTestSkipped();
         }
 
-        app(\Spatie\Permission\PermissionRegistrar::class)->initializeCache();
+        app(\Elite\Permission\PermissionRegistrar::class)->initializeCache();
 
         Artisan::call('about');
         $output = Artisan::output();
@@ -220,7 +220,7 @@ class CommandTest extends TestCase
             $this->markTestSkipped();
         }
 
-        app(\Spatie\Permission\PermissionRegistrar::class)->initializeCache();
+        app(\Elite\Permission\PermissionRegistrar::class)->initializeCache();
 
         config()->set('permission.teams', true);
 

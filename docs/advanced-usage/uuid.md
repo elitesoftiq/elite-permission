@@ -12,6 +12,7 @@ Since each UUID implementation approach is different, some of these may or may n
 We use "uuid" in the examples below. Adapt for ULID or GUID as needed.
 
 ## Migrations
+
 You will need to update the `create_permission_tables.php` migration after creating it with `php artisan vendor:publish`. After making your edits, be sure to run the migration!
 
 **User Models using UUIDs**
@@ -77,17 +78,18 @@ If you also want the roles and permissions to use a UUID for their `id` value, t
 -            ->references('id') // role id
 +            ->references('uuid') // role id
             ->on($tableNames['roles'])
-            ->onDelete('cascade'); 
+            ->onDelete('cascade');
 ```
 
-
 ## Configuration (OPTIONAL)
+
 You might want to change the pivot table field name from `model_id` to `model_uuid`, just for semantic purposes.
 For this, in the `permission.php` configuration file edit `column_names.model_morph_key`:
 
-- OPTIONAL: Change to `model_uuid` instead of the default `model_id`.
+-   OPTIONAL: Change to `model_uuid` instead of the default `model_id`.
+
 ```diff
-        'column_names' => [    
+        'column_names' => [
         /*
          * Change this if you want to name the related pivots other than defaults
          */
@@ -105,27 +107,31 @@ For this, in the `permission.php` configuration file edit `column_names.model_mo
 +            'model_morph_key' => 'model_uuid',
         ],
 ```
-- If you extend the models into your app, be sure to list those models in your `permissions.php` configuration file. See the Extending section of the documentation and the Models section below.
+
+-   If you extend the models into your app, be sure to list those models in your `permissions.php` configuration file. See the Extending section of the documentation and the Models section below.
 
 ## Models
+
 If you want all the role/permission objects to have a UUID instead of an integer, you will need to Extend the default Role and Permission models into your own namespace in order to set some specific properties. (See the Extending section of the docs, where it explains requirements of Extending, as well as the `permissions.php` configuration settings you need to update.)
 
 Examples:
 
 Create new models, which extend the Role and Permission models of this package, and add Laravel's `HasUuids` trait (available since Laravel 9):
+
 ```bash
 php artisan make:model Role
 php artisan make:model Permission
 ```
 
 `App\Model\Role.php`
+
 ```php
 <?php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\Permission\Models\Role as SpatieRole;
+use Elite\Permission\Models\Role as SpatieRole;
 
 class Role extends SpatieRole
 {
@@ -136,13 +142,14 @@ class Role extends SpatieRole
 ```
 
 `App\Model\Permission.php`
+
 ```php
 <?php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\Permission\Models\Permission as SpatiePermission;
+use Elite\Permission\Models\Permission as SpatiePermission;
 
 class Permission extends SpatiePermission
 {
@@ -151,7 +158,9 @@ class Permission extends SpatiePermission
     protected $primaryKey = 'uuid';
 }
 ```
+
 And edit `config/permission.php`
+
 ```diff
     'models' => [
 
@@ -161,10 +170,10 @@ And edit `config/permission.php`
          * is often just the "Permission" model but you may use whatever you like.
          *
          * The model you want to use as a Permission model needs to implement the
-         * `Spatie\Permission\Contracts\Permission` contract.
+         * `Elite\Permission\Contracts\Permission` contract.
          */
 
--        'permission' => Spatie\Permission\Models\Permission::class
+-        'permission' => Elite\Permission\Models\Permission::class
 +        'permission' => App\Models\Permission::class,
 
         /*
@@ -173,10 +182,10 @@ And edit `config/permission.php`
          * is often just the "Role" model but you may use whatever you like.
          *
          * The model you want to use as a Role model needs to implement the
-         * `Spatie\Permission\Contracts\Role` contract.
+         * `Elite\Permission\Contracts\Role` contract.
          */
 
--        'role' => Spatie\Permission\Models\Role::class,
+-        'role' => Elite\Permission\Models\Role::class,
 +        'role' => App\Models\Role::class,
 
     ],

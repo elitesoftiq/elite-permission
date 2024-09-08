@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission;
+namespace Elite\Permission;
 
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Auth\Access\Authorizable;
@@ -9,8 +9,8 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Contracts\AdminPermission as Permission;
-use Spatie\Permission\Contracts\AdminRole as Role;
+use Elite\Permission\Contracts\AdminPermission as Permission;
+use Elite\Permission\Contracts\AdminRole as Role;
 
 class AdminPermissionRegistrar
 {

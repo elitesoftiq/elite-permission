@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Tests\TestModels;
+namespace Elite\Permission\Tests\TestModels;
 
 class Manager extends User
 {

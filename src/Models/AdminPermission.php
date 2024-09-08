@@ -1,17 +1,17 @@
 <?php
 
-namespace Spatie\Permission\Models;
+namespace Elite\Permission\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spatie\Permission\Contracts\AdminPermission as PermissionContract;
-use Spatie\Permission\Exceptions\PermissionAlreadyExists;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-use Spatie\Permission\Guard;
-use Spatie\Permission\AdminPermissionRegistrar;
-use Spatie\Permission\Traits\HasAdminRoles;
-use Spatie\Permission\Traits\RefreshesAdminPermissionCache;
+use Elite\Permission\Contracts\AdminPermission as PermissionContract;
+use Elite\Permission\Exceptions\PermissionAlreadyExists;
+use Elite\Permission\Exceptions\PermissionDoesNotExist;
+use Elite\Permission\Guard;
+use Elite\Permission\AdminPermissionRegistrar;
+use Elite\Permission\Traits\HasAdminRoles;
+use Elite\Permission\Traits\RefreshesAdminPermissionCache;
 
 /**
  * @property ?\Illuminate\Support\Carbon $created_at

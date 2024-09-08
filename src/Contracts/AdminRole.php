@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Contracts;
+namespace Elite\Permission\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $name
  * @property string|null $guard_name
  *
- * @mixin \Spatie\Permission\Models\AdminRole
+ * @mixin \Elite\Permission\Models\AdminRole
  *
- * @phpstan-require-extends \Spatie\Permission\Models\AdminRole
+ * @phpstan-require-extends \Elite\Permission\Models\AdminRole
  */
 interface AdminRole
 {
@@ -24,7 +24,7 @@ interface AdminRole
      * Find an admin role by its name and guard name.
      *
      *
-     * @throws \Spatie\Permission\Exceptions\RoleDoesNotExist
+     * @throws \Elite\Permission\Exceptions\RoleDoesNotExist
      */
     public static function findByName(string $name, ?string $guardName): self;
 
@@ -32,7 +32,7 @@ interface AdminRole
      * Find an admin role by its id and guard name.
      *
      *
-     * @throws \Spatie\Permission\Exceptions\RoleDoesNotExist
+     * @throws \Elite\Permission\Exceptions\RoleDoesNotExist
      */
     public static function findById(int|string $id, ?string $guardName): self;
 
@@ -44,7 +44,7 @@ interface AdminRole
     /**
      * Determine if the user may perform the given admin permission.
      *
-     * @param  string|int|\Spatie\Permission\Contracts\AdminPermission|\BackedEnum  $permission
+     * @param  string|int|\Elite\Permission\Contracts\AdminPermission|\BackedEnum  $permission
      */
     public function hasAdminPermissionTo($permission, ?string $guardName): bool;
 }
