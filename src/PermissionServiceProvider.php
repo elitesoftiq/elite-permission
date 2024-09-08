@@ -15,6 +15,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
 use Spatie\Permission\Contracts\Role as RoleContract;
+use Spatie\Permission\Contracts\AdminPermission as AdminPermissionContract;
+use Spatie\Permission\Contracts\AdminRole as AdminRoleContract;
 
 class PermissionServiceProvider extends ServiceProvider
 {
@@ -39,7 +41,17 @@ class PermissionServiceProvider extends ServiceProvider
             }
         });
 
+        $this->callAfterResolving(Gate::class, function (Gate $gate, Application $app) {
+            if ($this->app['config']->get('admin-permission.register_permission_check_method')) {
+                /** @var AdminPermissionRegistrar $permissionLoader */
+                $permissionLoader = $app->get(AdminPermissionRegistrar::class);
+                $permissionLoader->clearPermissionsCollection();
+                $permissionLoader->registerPermissions($gate);
+            }
+        });
+
         $this->app->singleton(PermissionRegistrar::class);
+        $this->app->singleton(AdminPermissionRegistrar::class);
 
         $this->registerAbout();
     }
@@ -49,6 +61,10 @@ class PermissionServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/permission.php',
             'permission'
+        );
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/admin-permission.php',
+            'admin-permission'
         );
 
         $this->callAfterResolving('blade.compiler', fn (BladeCompiler $bladeCompiler) => $this->registerBladeExtensions($bladeCompiler));
@@ -68,10 +84,17 @@ class PermissionServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/permission.php' => config_path('permission.php'),
         ], 'permission-config');
+        $this->publishes([
+            __DIR__.'/../config/admin-permission.php' => config_path('admin-permission.php'),
+        ], 'admin-permission-config');
 
         $this->publishes([
             __DIR__.'/../database/migrations/create_permission_tables.php.stub' => $this->getMigrationFileName('create_permission_tables.php'),
         ], 'permission-migrations');
+
+        $this->publishes([
+            __DIR__.'/../database/migrations/create_admin_permission_tables.php.stub' => $this->getMigrationFileName('create_admin_permission_tables.php'),
+        ], 'admin-permission-migrations');
     }
 
     protected function registerCommands(): void
@@ -89,6 +112,10 @@ class PermissionServiceProvider extends ServiceProvider
             Commands\CreatePermission::class,
             Commands\Show::class,
             Commands\UpgradeForTeams::class,
+
+            Commands\CreateAdminRole::class,
+            Commands\CreateAdminPermission::class,
+            Commands\ShowAdmin::class,
         ]);
     }
 
@@ -113,12 +140,23 @@ class PermissionServiceProvider extends ServiceProvider
             // @phpstan-ignore-next-line
             $event->sandbox->make(PermissionRegistrar::class)->clearPermissionsCollection();
         });
+
+        if (! $this->app['config']->get('admin-permission.register_octane_reset_listener')) {
+            return;
+        }
+        // @phpstan-ignore-next-line
+        $dispatcher->listen(function (\Laravel\Octane\Contracts\OperationTerminated $event) {
+            // @phpstan-ignore-next-line
+            $event->sandbox->make(AdminPermissionRegistrar::class)->clearPermissionsCollection();
+        });
     }
 
     protected function registerModelBindings(): void
     {
         $this->app->bind(PermissionContract::class, fn ($app) => $app->make($app->config['permission.models.permission']));
         $this->app->bind(RoleContract::class, fn ($app) => $app->make($app->config['permission.models.role']));
+        $this->app->bind(AdminPermissionContract::class, fn ($app) => $app->make($app->config['admin-permission.models.permission']));
+        $this->app->bind(AdminRoleContract::class, fn ($app) => $app->make($app->config['admin-permission.models.role']));
     }
 
     public static function bladeMethodWrapper($method, $role, $guard = null): bool
@@ -140,6 +178,17 @@ class PermissionServiceProvider extends ServiceProvider
         $bladeCompiler->if('hasallroles', fn () => $bladeMethodWrapper('hasAllRoles', ...func_get_args()));
         $bladeCompiler->if('hasexactroles', fn () => $bladeMethodWrapper('hasExactRoles', ...func_get_args()));
         $bladeCompiler->directive('endunlessrole', fn () => '<?php endif; ?>');
+
+        // admin permission checks
+        $bladeCompiler->if('hasadminpermission', fn () => $bladeMethodWrapper('checkAdminPermissionTo', ...func_get_args()));
+
+        // role checks
+        $bladeCompiler->if('adminrole', fn () => $bladeMethodWrapper('hasAdminRole', ...func_get_args()));
+        $bladeCompiler->if('hasadminrole', fn () => $bladeMethodWrapper('hasAdminRole', ...func_get_args()));
+        $bladeCompiler->if('hasanyadminrole', fn () => $bladeMethodWrapper('hasAnyAdminRole', ...func_get_args()));
+        $bladeCompiler->if('hasalladminroles', fn () => $bladeMethodWrapper('hasAllAdminRoles', ...func_get_args()));
+        $bladeCompiler->if('hasexactadminroles', fn () => $bladeMethodWrapper('hasExactAdminRoles', ...func_get_args()));
+        $bladeCompiler->directive('endunlessadminrole', fn () => '<?php endif; ?>');
     }
 
     protected function registerMacroHelpers(): void
@@ -190,13 +239,13 @@ class PermissionServiceProvider extends ServiceProvider
 
         $config = $this->app['config'];
 
-        AboutCommand::add('Spatie Permissions', static fn () => [
+        AboutCommand::add('Elite Permissions', static fn () => [
             'Features Enabled' => collect($features)
                 ->filter(fn (string $feature, string $name): bool => $config->get("permission.{$feature}"))
                 ->keys()
                 ->whenEmpty(fn (Collection $collection) => $collection->push('Default'))
                 ->join(', '),
-            'Version' => InstalledVersions::getPrettyVersion('spatie/laravel-permission'),
+            'Version' => InstalledVersions::getPrettyVersion('elite/laravel-saas-permission'),
         ]);
     }
 }

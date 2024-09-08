@@ -24,7 +24,7 @@ class RoleMiddleware
             throw UnauthorizedException::notLoggedIn();
         }
 
-        if (! method_exists($user, 'hasAnyRole')) {
+        if (! method_exists($user, 'hasAnyRole') || ! method_exists($user, 'hasAnyAdminRole')) {
             throw UnauthorizedException::missingTraitHasRoles($user);
         }
 
@@ -32,7 +32,7 @@ class RoleMiddleware
             ? $role
             : explode('|', $role);
 
-        if (! $user->hasAnyRole($roles)) {
+        if (! $user->hasAnyRole($roles) && ! $user->hasAnyAdminRole($roles)) {
             throw UnauthorizedException::forRoles($roles);
         }
 

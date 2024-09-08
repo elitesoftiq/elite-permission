@@ -24,7 +24,7 @@ class PermissionMiddleware
             throw UnauthorizedException::notLoggedIn();
         }
 
-        if (! method_exists($user, 'hasAnyPermission')) {
+        if (! method_exists($user, 'hasAnyPermission') || ! method_exists($user, 'hasAnyAdminPermission')) {
             throw UnauthorizedException::missingTraitHasRoles($user);
         }
 
