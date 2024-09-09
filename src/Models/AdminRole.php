@@ -166,8 +166,8 @@ class AdminRole extends Model implements RoleContract
 
         $permission = $this->filterAdminPermission($permission, $guardName);
 
-        if (! $this->getGuardNames()->contains($permission->guard_name)) {
-            throw GuardDoesNotMatch::create($permission->guard_name, $guardName ?? $this->getGuardNames());
+        if (! $this->getAdminGuardNames()->contains($permission->guard_name)) {
+            throw GuardDoesNotMatch::create($permission->guard_name, $guardName ?? $this->getAdminGuardNames());
         }
 
         return $this->adminPermissions->contains($permission->getKeyName(), $permission->getKey());

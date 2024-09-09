@@ -1,5 +1,5 @@
 {
-    "name": "elitesoftiq/laravel-saas-permission",
+    "name": "elite/permission",
     "description": "SaaS Permission handling for Laravel 8.0 and up",
     "license": "MIT",
     "keywords": [

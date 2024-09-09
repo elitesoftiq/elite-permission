@@ -79,7 +79,7 @@ trait HasAdminRoles
 
             $method = is_int($role) || AdminPermissionRegistrar::isUid($role) ? 'findById' : 'findByName';
 
-            return $this->getAdminRoleClass()::{$method}($role, $guard ?: $this->getDefaultGuardName());
+            return $this->getAdminRoleClass()::{$method}($role, $guard ?: $this->getDefaultAdminGuardName());
         }, Arr::wrap($roles));
 
         $key = (new ($this->getAdminRoleClass())())->getKeyName();
@@ -120,7 +120,7 @@ trait HasAdminRoles
                 }
 
                 if (! in_array($role->getKey(), $array)) {
-                    $this->ensureModelSharesGuard($role);
+                    $this->ensureAdminModelSharesGuard($role);
                     $array[] = $role->getKey();
                 }
 
@@ -213,7 +213,7 @@ trait HasAdminRoles
         $this->loadMissing('adminRoles');
 
         if (is_string($roles) && strpos($roles, '|') !== false) {
-            $roles = $this->convertPipeToArray($roles);
+            $roles = $this->convertAdminPipeToArray($roles);
         }
 
         if ($roles instanceof \BackedEnum) {
@@ -293,7 +293,7 @@ trait HasAdminRoles
         }
 
         if (is_string($roles) && strpos($roles, '|') !== false) {
-            $roles = $this->convertPipeToArray($roles);
+            $roles = $this->convertAdminPipeToArray($roles);
         }
 
         if (is_string($roles)) {
@@ -337,7 +337,7 @@ trait HasAdminRoles
         $this->loadMissing('adminRoles');
 
         if (is_string($roles) && strpos($roles, '|') !== false) {
-            $roles = $this->convertPipeToArray($roles);
+            $roles = $this->convertAdminPipeToArray($roles);
         }
 
         if (is_string($roles)) {
@@ -376,17 +376,17 @@ trait HasAdminRoles
         }
 
         if (is_int($role) || AdminPermissionRegistrar::isUid($role)) {
-            return $this->getAdminRoleClass()::findById($role, $this->getDefaultGuardName());
+            return $this->getAdminRoleClass()::findById($role, $this->getDefaultAdminGuardName());
         }
 
         if (is_string($role)) {
-            return $this->getAdminRoleClass()::findByName($role, $this->getDefaultGuardName());
+            return $this->getAdminRoleClass()::findByName($role, $this->getDefaultAdminGuardName());
         }
 
         return $role;
     }
 
-    protected function convertPipeToArray(string $pipeString)
+    protected function convertAdminPipeToArray(string $pipeString)
     {
         $pipeString = trim($pipeString);
 

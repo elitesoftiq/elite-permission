@@ -50,7 +50,7 @@ trait HasAdminPermissions
         return $this->permissionClass;
     }
 
-    public function getWildcardClass()
+    public function getAdminWildcardClass()
     {
         if (! is_null($this->wildcardClass)) {
             return $this->wildcardClass;
@@ -147,7 +147,7 @@ trait HasAdminPermissions
 
             $method = is_int($permission) || AdminPermissionRegistrar::isUid($permission) ? 'findById' : 'findByName';
 
-            return $this->getAdminPermissionClass()::{$method}($permission, $this->getDefaultGuardName());
+            return $this->getAdminPermissionClass()::{$method}($permission, $this->getDefaultAdminGuardName());
         }, Arr::wrap($permissions));
     }
 
@@ -168,14 +168,14 @@ trait HasAdminPermissions
         if (is_int($permission) || AdminPermissionRegistrar::isUid($permission)) {
             $permission = $this->getAdminPermissionClass()::findById(
                 $permission,
-                $guardName ?? $this->getDefaultGuardName()
+                $guardName ?? $this->getDefaultAdminGuardName()
             );
         }
 
         if (is_string($permission)) {
             $permission = $this->getAdminPermissionClass()::findByName(
                 $permission,
-                $guardName ?? $this->getDefaultGuardName()
+                $guardName ?? $this->getDefaultAdminGuardName()
             );
         }
 
@@ -196,7 +196,7 @@ trait HasAdminPermissions
      */
     public function hasAdminPermissionTo($permission, $guardName = null): bool
     {
-        if ($this->getWildcardClass()) {
+        if ($this->getAdminWildcardClass()) {
             return $this->hasWildcardAdminPermission($permission, $guardName);
         }
 
@@ -213,7 +213,7 @@ trait HasAdminPermissions
      */
     protected function hasWildcardAdminPermission($permission, $guardName = null): bool
     {
-        $guardName = $guardName ?? $this->getDefaultGuardName();
+        $guardName = $guardName ?? $this->getDefaultAdminGuardName();
 
         if ($permission instanceof \BackedEnum) {
             $permission = $permission->value;
@@ -232,7 +232,7 @@ trait HasAdminPermissions
             throw WildcardPermissionInvalidArgument::create();
         }
 
-        return app($this->getWildcardClass(), ['record' => $this])->implies(
+        return app($this->getAdminWildcardClass(), ['record' => $this])->implies(
             $permission,
             $guardName,
             app(AdminPermissionRegistrar::class)->getWildcardPermissionIndex($this),
@@ -299,7 +299,7 @@ trait HasAdminPermissions
             return false;
         }
 
-        return $this->hasAdminRole($permission->roles);
+        return $this->hasAdminRole($permission->adminRoles);
     }
 
     /**
@@ -326,7 +326,7 @@ trait HasAdminPermissions
         }
 
         return $this->loadMissing('adminRoles', 'adminRoles.adminPermissions')
-            ->roles->flatMap(fn ($role) => $role->permissions)
+            ->adminRoles->flatMap(fn ($role) => $role->adminPermissions)
             ->sort()->values();
     }
 
@@ -365,7 +365,7 @@ trait HasAdminPermissions
                 }
 
                 if (! in_array($permission->getKey(), $array)) {
-                    $this->ensureModelSharesGuard($permission);
+                    $this->ensureAdminModelSharesGuard($permission);
                     $array[] = $permission->getKey();
                 }
 
@@ -476,11 +476,11 @@ trait HasAdminPermissions
         }
 
         if (is_int($permissions) || AdminPermissionRegistrar::isUid($permissions)) {
-            return $this->getAdminPermissionClass()::findById($permissions, $this->getDefaultGuardName());
+            return $this->getAdminPermissionClass()::findById($permissions, $this->getDefaultAdminGuardName());
         }
 
         if (is_string($permissions)) {
-            return $this->getAdminPermissionClass()::findByName($permissions, $this->getDefaultGuardName());
+            return $this->getAdminPermissionClass()::findByName($permissions, $this->getDefaultAdminGuardName());
         }
 
         if (is_array($permissions)) {
@@ -493,7 +493,7 @@ trait HasAdminPermissions
             }, $permissions);
 
             return $this->getAdminPermissionClass()::whereIn('name', $permissions)
-                ->whereIn('guard_name', $this->getGuardNames())
+                ->whereIn('guard_name', $this->getAdminGuardNames())
                 ->get();
         }
 
@@ -505,19 +505,19 @@ trait HasAdminPermissions
      *
      * @throws GuardDoesNotMatch
      */
-    protected function ensureModelSharesGuard($roleOrPermission)
+    protected function ensureAdminModelSharesGuard($roleOrPermission)
     {
-        if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
-            throw GuardDoesNotMatch::create($roleOrPermission->guard_name, $this->getGuardNames());
+        if (! $this->getAdminGuardNames()->contains($roleOrPermission->guard_name)) {
+            throw GuardDoesNotMatch::create($roleOrPermission->guard_name, $this->getAdminGuardNames());
         }
     }
 
-    protected function getGuardNames(): Collection
+    protected function getAdminGuardNames(): Collection
     {
         return Guard::getNames($this);
     }
 
-    protected function getDefaultGuardName(): string
+    protected function getDefaultAdminGuardName(): string
     {
         return Guard::getDefaultName($this);
     }
