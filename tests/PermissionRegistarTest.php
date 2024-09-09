@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
-use Spatie\Permission\Contracts\Permission as PermissionContract;
-use Spatie\Permission\Contracts\Role as RoleContract;
-use Spatie\Permission\Models\Permission as SpatiePermission;
-use Spatie\Permission\Models\Role as SpatieRole;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Tests\TestModels\Permission as TestPermission;
-use Spatie\Permission\Tests\TestModels\Role as TestRole;
+use Elite\Permission\Contracts\Permission as PermissionContract;
+use Elite\Permission\Contracts\Role as RoleContract;
+use Elite\Permission\Models\Permission as SpatiePermission;
+use Elite\Permission\Models\Role as SpatieRole;
+use Elite\Permission\PermissionRegistrar;
+use Elite\Permission\Tests\TestModels\Permission as TestPermission;
+use Elite\Permission\Tests\TestModels\Role as TestRole;
 
 class PermissionRegistarTest extends TestCase
 {

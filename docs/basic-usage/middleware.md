@@ -27,9 +27,9 @@ In Laravel 11 open `/bootstrap/app.php` and register them there:
 ```php
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'role' => \Elite\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Elite\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Elite\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
     })
 ```
@@ -42,21 +42,21 @@ In Laravel 9 and 10 you can add them in `app/Http/Kernel.php`:
 // Laravel 10+ uses $middlewareAliases = [
 protected $middlewareAliases = [
     // ...
-    'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-    'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-    'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+    'role' => \Elite\Permission\Middleware\RoleMiddleware::class,
+    'permission' => \Elite\Permission\Middleware\PermissionMiddleware::class,
+    'role_or_permission' => \Elite\Permission\Middleware\RoleOrPermissionMiddleware::class,
 ];
 ```
 
 ### Middleware Priority
-If your app is triggering *404 Not Found* responses when a *403 Not Authorized* response might be expected, it might be a middleware priority clash. Explore reordering priorities so that this package's middleware runs before Laravel's `SubstituteBindings` middleware. (See [Middleware docs](https://laravel.com/docs/master/middleware#sorting-middleware) ). 
+
+If your app is triggering _404 Not Found_ responses when a _403 Not Authorized_ response might be expected, it might be a middleware priority clash. Explore reordering priorities so that this package's middleware runs before Laravel's `SubstituteBindings` middleware. (See [Middleware docs](https://laravel.com/docs/master/middleware#sorting-middleware) ).
 
 In Laravel 11 you could explore `$middleware->prependToGroup()` instead. See the Laravel Documentation for details.
 
-
 ## Using Middleware in Routes and Controllers
 
-After you have registered the aliases as shown above, you can use them in your Routes and Controllers much the same way you use any other middleware: 
+After you have registered the aliases as shown above, you can use them in your Routes and Controllers much the same way you use any other middleware:
 
 ### Routes
 
@@ -94,13 +94,14 @@ public static function middleware(): array
         // examples with aliases, pipe-separated names, guards, etc:
         'role_or_permission:manager|edit articles',
         new Middleware('role:author', only: ['index']),
-        new Middleware(\Spatie\Permission\Middleware\RoleMiddleware::using('manager'), except:['show']),
-        new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('delete records,api'), only:['destroy']),
+        new Middleware(\Elite\Permission\Middleware\RoleMiddleware::using('manager'), except:['show']),
+        new Middleware(\Elite\Permission\Middleware\PermissionMiddleware::using('delete records,api'), only:['destroy']),
     ];
 }
 ```
 
 In Laravel 10 and older, you can register it in the constructor:
+
 ```php
 public function __construct()
 {
@@ -119,8 +120,7 @@ You can also use Laravel's Model Policy feature in your controller methods. See 
 All of the middleware can also be applied by calling the static `using` method, which accepts either an array or a `|`-separated string as input.
 
 ```php
-Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('manager')]], function () { ... });
-Route::group(['middleware' => [\Spatie\Permission\Middleware\PermissionMiddleware::using('publish articles|edit articles')]], function () { ... });
-Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleOrPermissionMiddleware::using(['manager', 'edit articles'])]], function () { ... });
+Route::group(['middleware' => [\Elite\Permission\Middleware\RoleMiddleware::using('manager')]], function () { ... });
+Route::group(['middleware' => [\Elite\Permission\Middleware\PermissionMiddleware::using('publish articles|edit articles')]], function () { ... });
+Route::group(['middleware' => [\Elite\Permission\Middleware\RoleOrPermissionMiddleware::using(['manager', 'edit articles'])]], function () { ... });
 ```
-

@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
-use Spatie\Permission\Contracts\Role;
-use Spatie\Permission\Tests\TestModels\User;
+use Elite\Permission\Contracts\Role;
+use Elite\Permission\Tests\TestModels\User;
 
 class TeamHasRolesTest extends HasRolesTest
 {

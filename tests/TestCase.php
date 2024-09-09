@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace t\Permission\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -11,33 +11,83 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Passport\PassportServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\Permission\Contracts\Permission;
-use Spatie\Permission\Contracts\Role;
-use Spatie\Permission\Exceptions\UnauthorizedException;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\PermissionServiceProvider;
-use Spatie\Permission\Tests\TestModels\Admin;
-use Spatie\Permission\Tests\TestModels\Client;
-use Spatie\Permission\Tests\TestModels\User;
+use t\Permission\Contracts\Permission;
+use t\Permission\Contracts\Role;
+use t\Permission\Exceptions\UnauthorizedException;
+use t\Permission\PermissionRegistrar;
+use t\Permission\PermissionServiceProvider;
+use t\Permission\Tests\TestModels\Admin;
+use t\Permission\Tests\TestModels\Client;
+use t\Permission\Tests\TestModels\User;
 
 abstract class TestCase extends Orchestra
 {
-    /** @var \Spatie\Permission\Tests\User */
+    /** @var \t\Permission\Tests\User */
     protected $testUser;
 
-    /** @var \Spatie\Permission\Tests\Admin */
+    /** @var \t\Permission\Tests\Admin */
     protected $testAdmin;
 
-    /** @var \Spatie\Permission\Models\Role */
+    /** @var \t\Permission\Models\Role */
     protected $testUserRole;
 
-    /** @var \Spatie\Permission\Models\Role */
+    /** @var \t\Permission\Models\Role */
     protected $testAdminRole;
 
-    /** @var \Spatie\Permission\Models\Permission */
+    /** @var \t\Permission\Models\Permission */
     protected $testUserPermission;
 
-    /** @var \Spatie\Permission\Models\Permission */
+    /** @var \t\Permission\Models\Permission */
+    protected $testAdminPermission;
+
+    /** @var bool */
+    protected $useCustomModels = false;
+
+    /** @var bool */
+    protected $hasTeams = false;
+
+    protected static $migration;
+
+<?php
+
+namespace Elite\Permission\Tests;
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
+use Laravel\Passport\PassportServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
+use Elite\Permission\Contracts\Permission;
+use Elite\Permission\Contracts\Role;
+use Elite\Permission\Exceptions\UnauthorizedException;
+use Elite\Permission\PermissionRegistrar;
+use Elite\Permission\PermissionServiceProvider;
+use Elite\Permission\Tests\TestModels\Admin;
+use Elite\Permission\Tests\TestModels\Client;
+use Elite\Permission\Tests\TestModels\User;
+
+abstract class TestCase extends Orchestra
+{
+    /** @var \Elite\Permission\Tests\User */
+    protected $testUser;
+
+    /** @var \Elite\Permission\Tests\Admin */
+    protected $testAdmin;
+
+    /** @var \Elite\Permission\Models\Role */
+    protected $testUserRole;
+
+    /** @var \Elite\Permission\Models\Role */
+    protected $testAdminRole;
+
+    /** @var \Elite\Permission\Models\Permission */
+    protected $testUserPermission;
+
+    /** @var \Elite\Permission\Models\Permission */
     protected $testAdminPermission;
 
     /** @var bool */
@@ -55,9 +105,9 @@ abstract class TestCase extends Orchestra
 
     protected Client $testClient;
 
-    protected \Spatie\Permission\Models\Permission $testClientPermission;
+    protected \Elite\Permission\Models\Permission $testClientPermission;
 
-    protected \Spatie\Permission\Models\Role $testClientRole;
+    protected \Elite\Permission\Models\Role $testClientRole;
 
     protected function setUp(): void
     {
@@ -132,8 +182,8 @@ abstract class TestCase extends Orchestra
         $app['config']->set('auth.guards.admin', ['driver' => 'session', 'provider' => 'admins']);
         $app['config']->set('auth.providers.admins', ['driver' => 'eloquent', 'model' => Admin::class]);
         if ($this->useCustomModels) {
-            $app['config']->set('permission.models.permission', \Spatie\Permission\Tests\TestModels\Permission::class);
-            $app['config']->set('permission.models.role', \Spatie\Permission\Tests\TestModels\Role::class);
+            $app['config']->set('permission.models.permission', \Elite\Permission\Tests\TestModels\Permission::class);
+            $app['config']->set('permission.models.role', \Elite\Permission\Tests\TestModels\Role::class);
         }
         // Use test User model for users provider
         $app['config']->set('auth.providers.users.model', User::class);
@@ -279,45 +329,3 @@ abstract class TestCase extends Orchestra
             return [
                 'status' => $request->user()->hasPermissionTo('do_that'),
             ];
-        });
-    }
-
-    ////// TEST HELPERS
-    public function runMiddleware($middleware, $permission, $guard = null, bool $client = false)
-    {
-        $request = new Request;
-        if ($client) {
-            $request->headers->set('Authorization', 'Bearer '.str()->random(30));
-        }
-
-        try {
-            return $middleware->handle($request, function () {
-                return (new Response())->setContent('<html></html>');
-            }, $permission, $guard)->status();
-        } catch (UnauthorizedException $e) {
-            return $e->getStatusCode();
-        }
-    }
-
-    public function getLastRouteMiddlewareFromRouter($router)
-    {
-        return last($router->getRoutes()->get())->middleware();
-    }
-
-    public function getRouter()
-    {
-        return app('router');
-    }
-
-    public function getRouteResponse()
-    {
-        return function () {
-            return (new Response())->setContent('<html></html>');
-        };
-    }
-
-    protected function getLaravelVersion()
-    {
-        return (float) app()->version();
-    }
-}

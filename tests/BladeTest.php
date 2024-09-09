@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
 use Illuminate\Support\Facades\Artisan;
-use Spatie\Permission\Contracts\Role;
+use Elite\Permission\Contracts\Role;
 
 class BladeTest extends TestCase
 {

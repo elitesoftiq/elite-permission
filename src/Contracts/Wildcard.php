@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Contracts;
+namespace Elite\Permission\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Permission\Tests\TestModels;
+namespace Elite\Permission\Tests\TestModels;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Permission extends \Spatie\Permission\Models\Permission
+class Permission extends \Elite\Permission\Models\Permission
 {
     use SoftDeletes;
 

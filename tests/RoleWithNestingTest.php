@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
-use Spatie\Permission\Tests\TestModels\Role;
+use Elite\Permission\Tests\TestModels\Role;
 
 class RoleWithNestingTest extends TestCase
 {

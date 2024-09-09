@@ -9,13 +9,13 @@ An example is shown below for your convenience, but nothing here is specific to 
 
 You can find all the exceptions added by this package in the code here: [https://github.com/spatie/laravel-permission/tree/main/src/Exceptions](https://github.com/spatie/laravel-permission/tree/main/src/Exceptions)
 
-
 **app/Exceptions/Handler.php**
+
 ```php
 
 public function register()
 {
-    $this->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) {
+    $this->renderable(function (\Elite\Permission\Exceptions\UnauthorizedException $e, $request) {
         return response()->json([
             'responseMessage' => 'You do not have the required authorization.',
             'responseStatus'  => 403,

@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\Permission\Tests\TestModels;
+namespace Elite\Permission\Tests\TestModels;
 
-class RuntimeRole extends \Spatie\Permission\Models\Role
+class RuntimeRole extends \Elite\Permission\Models\Role
 {
     protected $visible = [
         'id',

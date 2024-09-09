@@ -7,6 +7,7 @@ parameters:
     paths:
         - src
         - config
+        - database/migrations/create_admin_permission_tables.php.stub
         - database/migrations/create_permission_tables.php.stub
         - database/migrations/add_teams_fields.php.stub
     tmpDir: build/phpstan

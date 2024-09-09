@@ -11,7 +11,7 @@ And if you use the `WithoutModelEvents` trait in your seeders, flush it **AFTER 
 
 ```php
 // reset cached roles and permissions
-app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+app()[\Elite\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 ```
 
 You can optionally flush the cache before seeding by using the `SetUp()` method of your test suite (see the Testing page in the docs).
@@ -28,15 +28,15 @@ Here is a sample seeder, which first clears the cache, creates permissions and t
 
 ```php
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Elite\Permission\Models\Role;
+use Elite\Permission\Models\Permission;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
     public function run(): void
     {
         // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[\Elite\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
         Permission::create(['name' => 'edit articles']);
@@ -45,7 +45,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'unpublish articles']);
 
         // update cache to know about the newly created permissions (required if using WithoutModelEvents in seeders)
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[\Elite\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
 
         // create roles and assign created permissions
@@ -98,7 +98,6 @@ User::factory()
         $user->assignRole('Member');
     });
 ```
-
 
 ## Speeding up seeding for large data sets
 

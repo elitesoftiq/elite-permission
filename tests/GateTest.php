@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
 use Illuminate\Contracts\Auth\Access\Gate;
-use Spatie\Permission\Contracts\Permission;
+use Elite\Permission\Contracts\Permission;
 
 class GateTest extends TestCase
 {

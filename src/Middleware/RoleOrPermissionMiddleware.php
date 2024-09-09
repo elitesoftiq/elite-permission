@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\Permission\Middleware;
+namespace Elite\Permission\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Exceptions\UnauthorizedException;
-use Spatie\Permission\Guard;
+use Elite\Permission\Exceptions\UnauthorizedException;
+use Elite\Permission\Guard;
 
 class RoleOrPermissionMiddleware
 {
@@ -24,7 +24,7 @@ class RoleOrPermissionMiddleware
             throw UnauthorizedException::notLoggedIn();
         }
 
-        if (! method_exists($user, 'hasAnyRole') || ! method_exists($user, 'hasAnyPermission')) {
+        if (! method_exists($user, 'hasAnyRole') || ! method_exists($user, 'hasAnyPermission') || ! method_exists($user, 'hasAnyAdminRole') || ! method_exists($user, 'hasAnyAdminPermission')) {
             throw UnauthorizedException::missingTraitHasRoles($user);
         }
 
@@ -32,7 +32,7 @@ class RoleOrPermissionMiddleware
             ? $roleOrPermission
             : explode('|', $roleOrPermission);
 
-        if (! $user->canAny($rolesOrPermissions) && ! $user->hasAnyRole($rolesOrPermissions)) {
+        if (! $user->canAny($rolesOrPermissions) && ! $user->hasAnyRole($rolesOrPermissions) && ! $user->hasAnyAdminRole($rolesOrPermissions)) {
             throw UnauthorizedException::forRolesOrPermissions($rolesOrPermissions);
         }
 

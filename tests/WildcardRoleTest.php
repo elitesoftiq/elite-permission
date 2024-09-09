@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\Permission\Tests;
+namespace Elite\Permission\Tests;
 
-use Spatie\Permission\Models\Permission;
+use Elite\Permission\Models\Permission;
 
 class WildcardRoleTest extends TestCase
 {
