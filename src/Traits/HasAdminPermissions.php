@@ -19,7 +19,7 @@ use Elite\Permission\WildcardPermission;
 
 trait HasAdminPermissions
 {
-    private ?string $permissionClass = null;
+    private ?string $adminPermissionClass = null;
 
     private ?string $wildcardClass = null;
 
@@ -43,11 +43,11 @@ trait HasAdminPermissions
 
     public function getAdminPermissionClass(): string
     {
-        if (! $this->permissionClass) {
-            $this->permissionClass = app(AdminPermissionRegistrar::class)->getPermissionClass();
+        if (! $this->adminPermissionClass) {
+            $this->adminPermissionClass = app(AdminPermissionRegistrar::class)->getPermissionClass();
         }
 
-        return $this->permissionClass;
+        return $this->adminPermissionClass;
     }
 
     public function getAdminWildcardClass()
@@ -99,18 +99,25 @@ trait HasAdminPermissions
         $roleKey = (new (is_a($this, Role::class) ? static::class : $this->getAdminRoleClass())())->getKeyName();
 
         $rolesWithPermissions = is_a($this, Role::class) ? [] : array_unique(
-            array_reduce($permissions, fn ($result, $permission) => array_merge($result, $permission->adminRoles->all()), [])
+            array_reduce($permissions, fn($result, $permission) => array_merge($result, $permission->adminRoles->all()), [])
         );
 
-        return $query->where(fn (Builder $query) => $query
-            ->{! $without ? 'whereHas' : 'whereDoesntHave'}('adminPermissions', fn (Builder $subQuery) => $subQuery
-            ->whereIn(config('admin-permission.table_names.permissions').".$permissionKey", \array_column($permissions, $permissionKey))
-            )
-            ->when(count($rolesWithPermissions), fn ($whenQuery) => $whenQuery
-                ->{! $without ? 'orWhereHas' : 'whereDoesntHave'}('adminRoles', fn (Builder $subQuery) => $subQuery
-                ->whereIn(config('admin-permission.table_names.roles').".$roleKey", \array_column($rolesWithPermissions, $roleKey))
+        return $query->where(
+            fn(Builder $query) => $query
+                ->{! $without ? 'whereHas' : 'whereDoesntHave'}(
+                    'adminPermissions',
+                    fn(Builder $subQuery) => $subQuery
+                        ->whereIn(config('admin-permission.table_names.permissions') . ".$permissionKey", \array_column($permissions, $permissionKey))
                 )
-            )
+                ->when(
+                    count($rolesWithPermissions),
+                    fn($whenQuery) => $whenQuery
+                        ->{! $without ? 'orWhereHas' : 'whereDoesntHave'}(
+                            'adminRoles',
+                            fn(Builder $subQuery) => $subQuery
+                                ->whereIn(config('admin-permission.table_names.roles') . ".$roleKey", \array_column($rolesWithPermissions, $roleKey))
+                        )
+                )
         );
     }
 
@@ -326,7 +333,7 @@ trait HasAdminPermissions
         }
 
         return $this->loadMissing('adminRoles', 'adminRoles.adminPermissions')
-            ->adminRoles->flatMap(fn ($role) => $role->adminPermissions)
+            ->adminRoles->flatMap(fn($role) => $role->adminPermissions)
             ->sort()->values();
     }
 
@@ -386,7 +393,7 @@ trait HasAdminPermissions
         $model = $this->getModel();
 
         if ($model->exists) {
-            $currentPermissions = $this->adminPermissions->map(fn ($permission) => $permission->getKey())->toArray();
+            $currentPermissions = $this->adminPermissions->map(fn($permission) => $permission->getKey())->toArray();
 
             $this->adminPermissions()->attach(array_diff($permissions, $currentPermissions), []);
             $model->unsetRelation('adminPermissions');
