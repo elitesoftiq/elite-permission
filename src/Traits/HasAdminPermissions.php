@@ -443,7 +443,7 @@ trait HasAdminPermissions
             $this->setRelation('adminPermissions', collect());
         }
 
-        return $this->givePermissionTo($permissions);
+        return $this->giveAdminPermissionTo($permissions);
     }
 
     /**
