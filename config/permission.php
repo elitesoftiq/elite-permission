@@ -111,6 +111,17 @@ return [
     'register_octane_reset_listener' => false,
 
     /*
+     * Events will fire when a role or permission is assigned/unassigned:
+     * \Elite\Permission\Events\RoleAttached
+     * \Elite\Permission\Events\RoleDetached
+     * \Elite\Permission\Events\PermissionAttached
+     * \Elite\Permission\Events\PermissionDetached
+     *
+     * To enable, set to true, and then create listeners to watch these events.
+     */
+    'events_enabled' => false,
+
+    /*
      * Teams Feature.
      * When set to true the package implements teams using the 'team_foreign_key'.
      * If you want the migrations to register the 'team_foreign_key', you must

@@ -1,5 +1,6 @@
 {
     "name": "elite/permission",
+    "version": "1.1",
     "description": "SaaS Permission handling for Laravel 8.0 and up",
     "license": "MIT",
     "keywords": [

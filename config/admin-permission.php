@@ -104,6 +104,17 @@ return [
     'register_octane_reset_listener' => false,
 
     /*
+     * Events will fire when an admin role or admin permission is assigned/unassigned:
+     * \Elite\Permission\Events\AdminRoleAttached
+     * \Elite\Permission\Events\AdminRoleDetached
+     * \Elite\Permission\Events\AdminPermissionAttached
+     * \Elite\Permission\Events\AdminPermissionDetached
+     *
+     * To enable, set to true, and then create listeners to watch these events.
+     */
+    'events_enabled' => false,
+
+    /*
      * By default wildcard admin permission lookups are disabled.
      * See documentation to understand supported syntax.
      */

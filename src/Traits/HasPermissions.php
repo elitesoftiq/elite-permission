@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 use Elite\Permission\Contracts\Permission;
 use Elite\Permission\Contracts\Role;
 use Elite\Permission\Contracts\Wildcard;
+use Elite\Permission\Events\PermissionAttached;
+use Elite\Permission\Events\PermissionDetached;
 use Elite\Permission\Exceptions\GuardDoesNotMatch;
 use Elite\Permission\Exceptions\PermissionDoesNotExist;
 use Elite\Permission\Exceptions\WildcardPermissionInvalidArgument;
@@ -422,6 +424,10 @@ trait HasPermissions
             $this->forgetCachedPermissions();
         }
 
+        if (config('permission.events_enabled')) {
+            event(new PermissionAttached($this->getModel(), $permissions));
+        }
+
         $this->forgetWildcardPermissionIndex();
 
         return $this;
@@ -459,10 +465,16 @@ trait HasPermissions
      */
     public function revokePermissionTo($permission)
     {
-        $this->permissions()->detach($this->getStoredPermission($permission));
+        $storedPermission = $this->getStoredPermission($permission);
+
+        $this->permissions()->detach($storedPermission);
 
         if (is_a($this, Role::class)) {
             $this->forgetCachedPermissions();
+        }
+
+        if (config('permission.events_enabled')) {
+            event(new PermissionDetached($this->getModel(), $storedPermission));
         }
 
         $this->forgetWildcardPermissionIndex();
