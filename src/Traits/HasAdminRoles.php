@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 use Elite\Permission\Contracts\AdminPermission as Permission;
 use Elite\Permission\Contracts\AdminRole as Role;
 use Elite\Permission\AdminPermissionRegistrar;
+use Elite\Permission\Events\AdminRoleAttached;
+use Elite\Permission\Events\AdminRoleDetached;
 
 trait HasAdminRoles
 {
@@ -165,6 +167,10 @@ trait HasAdminRoles
             $this->forgetCachedAdminPermissions();
         }
 
+        if (config('admin-permission.events_enabled')) {
+            event(new AdminRoleAttached($this->getModel(), $roles));
+        }
+
         return $this;
     }
 
@@ -173,14 +179,20 @@ trait HasAdminRoles
      *
      * @param  string|int|Role|\BackedEnum  $role
      */
-    public function removeAdminRole($role)
+    public function removeAdminRole(...$role)
     {
-        $this->adminRoles()->detach($this->getStoredAdminRole($role));
+        $roles = $this->collectAdminRoles($role);
+
+        $this->adminRoles()->detach($roles);
 
         $this->unsetRelation('adminRoles');
 
         if (is_a($this, Permission::class)) {
             $this->forgetCachedAdminPermissions();
+        }
+
+        if (config('admin-permission.events_enabled')) {
+            event(new AdminRoleDetached($this->getModel(), $roles));
         }
 
         return $this;
@@ -196,8 +208,17 @@ trait HasAdminRoles
     {
         if ($this->getModel()->exists) {
             $this->collectAdminRoles($roles);
-            $this->adminRoles()->detach();
-            $this->setRelation('adminRoles', collect());
+
+            if (config('admin-permission.events_enabled')) {
+                $currentRoles = $this->adminRoles()->get();
+
+                if ($currentRoles->isNotEmpty()) {
+                    $this->removeAdminRole($currentRoles);
+                }
+            } else {
+                $this->adminRoles()->detach();
+                $this->setRelation('adminRoles', collect());
+            }
         }
 
         return $this->assignAdminRole($roles);

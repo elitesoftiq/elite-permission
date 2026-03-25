@@ -8,6 +8,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Elite\Permission\Contracts\Permission;
 use Elite\Permission\Contracts\Role;
+use Elite\Permission\Events\RoleAttached;
+use Elite\Permission\Events\RoleDetached;
 use Elite\Permission\PermissionRegistrar;
 
 trait HasRoles
@@ -179,6 +181,10 @@ trait HasRoles
             $this->forgetCachedPermissions();
         }
 
+        if (config('permission.events_enabled')) {
+            event(new RoleAttached($this->getModel(), $roles));
+        }
+
         return $this;
     }
 
@@ -187,14 +193,20 @@ trait HasRoles
      *
      * @param  string|int|Role|\BackedEnum  $role
      */
-    public function removeRole($role)
+    public function removeRole(...$role)
     {
-        $this->roles()->detach($this->getStoredRole($role));
+        $roles = $this->collectRoles($role);
+
+        $this->roles()->detach($roles);
 
         $this->unsetRelation('roles');
 
         if (is_a($this, Permission::class)) {
             $this->forgetCachedPermissions();
+        }
+
+        if (config('permission.events_enabled')) {
+            event(new RoleDetached($this->getModel(), $roles));
         }
 
         return $this;
@@ -210,8 +222,16 @@ trait HasRoles
     {
         if ($this->getModel()->exists) {
             $this->collectRoles($roles);
-            $this->roles()->detach();
-            $this->setRelation('roles', collect());
+
+            if (config('permission.events_enabled')) {
+                $currentRoles = $this->roles()->get();
+                if ($currentRoles->isNotEmpty()) {
+                    $this->removeRole($currentRoles);
+                }
+            } else {
+                $this->roles()->detach();
+                $this->setRelation('roles', collect());
+            }
         }
 
         return $this->assignRole($roles);

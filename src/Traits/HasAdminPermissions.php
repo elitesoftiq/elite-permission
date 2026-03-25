@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 use Elite\Permission\Contracts\AdminPermission as Permission;
 use Elite\Permission\Contracts\AdminRole as Role;
 use Elite\Permission\Contracts\Wildcard;
+use Elite\Permission\Events\AdminPermissionAttached;
+use Elite\Permission\Events\AdminPermissionDetached;
 use Elite\Permission\Exceptions\GuardDoesNotMatch;
 use Elite\Permission\Exceptions\PermissionDoesNotExist;
 use Elite\Permission\Exceptions\WildcardPermissionInvalidArgument;
@@ -417,6 +419,10 @@ trait HasAdminPermissions
             $this->forgetCachedAdminPermissions();
         }
 
+        if (config('admin-permission.events_enabled')) {
+            event(new AdminPermissionAttached($this->getModel(), $permissions));
+        }
+
         $this->forgetWildcardAdminPermissionIndex();
 
         return $this;
@@ -454,10 +460,16 @@ trait HasAdminPermissions
      */
     public function revokeAdminPermissionTo($permission)
     {
-        $this->adminPermissions()->detach($this->getStoredAdminPermission($permission));
+        $storedAdminPermission = $this->getStoredAdminPermission($permission);
+
+        $this->adminPermissions()->detach($storedAdminPermission);
 
         if (is_a($this, Role::class)) {
             $this->forgetCachedAdminPermissions();
+        }
+
+        if (config('admin-permission.events_enabled')) {
+            event(new AdminPermissionDetached($this->getModel(), $storedAdminPermission));
         }
 
         $this->forgetWildcardAdminPermissionIndex();
